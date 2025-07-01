@@ -71,14 +71,9 @@ export const renderer = {
   },
 
   html({ text, block }) {
-    // FIXME inline html is just text
-    if (!block) {
-      return text;
-    }
-
-    const template = document.createElement('template');
-    template.innerHTML = text;
-    return template.content;
+    // HTML should be handled by the blockHtml and inlineHtml extensions in extension.js
+    // If it is not just assume it is text;
+    return text;
   },
 
   heading({ tokens, depth }) {

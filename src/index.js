@@ -1,5 +1,6 @@
 import { Parser } from './parser.js';
 import { renderer } from './renderer.js';
+import { blockHtml, inlineHtml } from './extensions.js';
 
 export default function() {
   return {
@@ -9,5 +10,9 @@ export default function() {
       },
     },
     renderer,
+    extensions: [
+      blockHtml,
+      inlineHtml,
+    ],
   };
 }
