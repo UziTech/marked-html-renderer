@@ -70,9 +70,9 @@ export const renderer = {
     return blockquote;
   },
 
-  html({ text, block }) {
+  html({ text }) {
     // HTML should be handled by the blockHtml and inlineHtml extensions in extension.js
-    // If it is not just assume it is text;
+    // If it is not just assume it is text.
     return text;
   },
 
