@@ -14,6 +14,7 @@ export default {
       statements: 100,
     },
   },
+  testEnvironment: 'jsdom',
   testRegex: /\.test\.js$/.source,
   transform: {
     '\\.[jt]sx?$': 'babel-jest',

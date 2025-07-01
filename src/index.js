@@ -1,24 +1,13 @@
-export default function(options = {}) {
-  // extension code here
+import { Parser } from './parser.js';
+import { renderer } from './renderer.js';
 
+export default function() {
   return {
-    tokenizer: {
-      paragraph(src) {
-        if (src !== 'example markdown') {
-          return false;
-        }
-
-        const token = {
-          type: 'paragraph',
-          raw: src,
-          text: 'example html',
-          tokens: [],
-        };
-
-        this.lexer.inline(token.text, token.tokens);
-
-        return token;
+    hooks: {
+      provideParser() {
+        return this.block ? Parser.parse : Parser.parseInline;
       },
     },
+    renderer,
   };
 }
