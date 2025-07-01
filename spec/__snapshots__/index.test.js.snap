@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`this-extension reference.md 1`] = `
+exports[`marked.parse reference.md 1`] = `
 "<h1>Markdown Quick Reference</h1><p>This guide is a very brief overview, with examples, of the syntax that <a href="http://daringfireball.net/projects/markdown/">Markdown</a> supports. It is itself written in Markdown and you can copy the samples over to the left-hand pane for experimentation. It's shown as <em>text</em> and not <em>rendered HTML</em>.</p><h1>Simple Text Formatting</h1><p>First thing is first. You can use <em>stars</em> or <em>underscores</em> for italics. <strong>Double stars</strong> and <strong>double underscores</strong> for bold. <em><strong>Three together</strong></em> for <em><strong>both</strong></em>.</p><p>Paragraphs are pretty easy too. Just have a blank line between chunks of text.</p><blockquote><p>This chunk of text is in a block quote. Its multiple lines will all be
 indented a bit from the rest of the text.</p><blockquote><p>Multiple levels of block quotes also work.</p></blockquote></blockquote><p>Sometimes you want to include code, such as when you are explaining how <code>&lt;h1&gt;</code> HTML tags work, or maybe you are a programmer and you are discussing <code>someMethod()</code>.</p><p>If you want to include code and have new
 lines preserved, indent the line with a tab
@@ -32,3 +32,5 @@ It is a pity, but markdown does **not** work in here for most markdown parsers.
 </div>
 "
 `;
+
+exports[`marked.parseInline reference.md 1`] = `"<strong>Some</strong> <em>inline</em> <del>markdown</del>"`;
