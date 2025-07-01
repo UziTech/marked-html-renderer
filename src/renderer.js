@@ -70,7 +70,12 @@ export const renderer = {
     return blockquote;
   },
 
-  html({ text }) {
+  html({ text, block }) {
+    // FIXME inline html is just text
+    if (!block) {
+      return text;
+    }
+
     const template = document.createElement('template');
     template.innerHTML = text;
     return template.content;
