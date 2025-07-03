@@ -8,5 +8,5 @@ export function getInnerHTML(fragment) {
 }
 
 export function readMarkdownFile(path) {
-  return readFile(resolve(__dirname, 'fixtures', path), 'utf8');
+  return readFile(resolve(import.meta.dirname, 'fixtures', path), 'utf8');
 }

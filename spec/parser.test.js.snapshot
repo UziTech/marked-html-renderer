@@ -1,0 +1,15 @@
+exports[`Parser > escaped code 1`] = `
+"<pre><code>code\\n</code></pre>"
+`;
+
+exports[`Parser > invalid block token type silent 1`] = `
+""
+`;
+
+exports[`Parser > invalid inline token type silent 1`] = `
+""
+`;
+
+exports[`Parser > multiple text tokens 1`] = `
+"<p>text\\ntext2</p>"
+`;
