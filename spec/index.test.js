@@ -36,6 +36,7 @@ a
 multiline comment
 -->
 `,
+    html: '<div>',
   };
   test('reference.md', async() => {
     const marked = new Marked();

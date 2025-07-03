@@ -76,12 +76,10 @@ export const renderer = {
     // HTML should be handled by the blockHtml and inlineHtml extensions in extension.js
     // Handle comments
     const comment = /^<!--([\s\S]*?)-->/.exec(text);
-    /* istanbul ignore else */
     if (comment) {
       return document.createComment(comment[1]);
     }
     // If it is not just assume it is text.
-    /* istanbul ignore next */
     return text;
   },
 

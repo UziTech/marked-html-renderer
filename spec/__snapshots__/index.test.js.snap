@@ -15,6 +15,8 @@ multiline comment
 -->"
 `;
 
+exports[`marked.parse html 1`] = `"&lt;div&gt;"`;
+
 exports[`marked.parse loose task list 1`] = `"<ul><li><p><input type="checkbox" disabled=""> task</p></li><li><input type="checkbox" checked="" disabled=""> <h1>loose</h1></li></ul>"`;
 
 exports[`marked.parse ordered list not starting at 1 1`] = `"<ol start="2"><li>list</li></ol>"`;
