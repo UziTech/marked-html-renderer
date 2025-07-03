@@ -1,5 +1,24 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`extensions fallback 1`] = `"<p><em>test</em></p>"`;
+
+exports[`extensions fallback 2`] = `"<p><em>test</em></p>"`;
+
+exports[`marked.parse code fence with lang string 1`] = `
+"<pre class="language-text"><code>a
+</code></pre>"
+`;
+
+exports[`marked.parse comments 1`] = `
+"<!-- comment --><!--
+multiline comment
+-->"
+`;
+
+exports[`marked.parse loose task list 1`] = `"<ul><li><p><input type="checkbox" disabled=""> task</p></li><li><input type="checkbox" checked="" disabled=""> <h1>loose</h1></li></ul>"`;
+
+exports[`marked.parse ordered list not starting at 1 1`] = `"<ol start="2"><li>list</li></ol>"`;
+
 exports[`marked.parse reference.md 1`] = `
 "<h1>Markdown Quick Reference</h1><p>This guide is a very brief overview, with examples, of the syntax that <a href="http://daringfireball.net/projects/markdown/">Markdown</a> supports. It is itself written in Markdown and you can copy the samples over to the left-hand pane for experimentation. It's shown as <em>text</em> and not <em>rendered HTML</em>.</p><h1>Simple Text Formatting</h1><p>First thing is first. You can use <em>stars</em> or <em>underscores</em> for italics. <strong>Double stars</strong> and <strong>double underscores</strong> for bold. <em><strong>Three together</strong></em> for <em><strong>both</strong></em>.</p><p>Paragraphs are pretty easy too. Just have a blank line between chunks of text.</p><blockquote><p>This chunk of text is in a block quote. Its multiple lines will all be
 indented a bit from the rest of the text.</p><blockquote><p>Multiple levels of block quotes also work.</p></blockquote></blockquote><p>Sometimes you want to include code, such as when you are explaining how <code>&lt;h1&gt;</code> HTML tags work, or maybe you are a programmer and you are discussing <code>someMethod()</code>.</p><p>If you want to include code and have new
@@ -33,4 +52,24 @@ It is a pity, but markdown does **not** work in here for most markdown parsers.
 "
 `;
 
-exports[`marked.parseInline reference.md 1`] = `"<strong>Some</strong> <em>inline</em> <del>markdown</del>"`;
+exports[`marked.parse table 1`] = `"<table><thead><tr><th align="left">a</th><th align="center">b</th><th align="right">c</th></tr></thead><tbody><tr><td align="left">1</td><td align="center">2</td><td align="right">3</td></tr></tbody></table>"`;
+
+exports[`marked.parse table no rows 1`] = `"<table><thead><tr><th>a</th><th>b</th><th>c</th></tr></thead></table>"`;
+
+exports[`marked.parse task list 1`] = `"<ul><li><input type="checkbox" disabled=""> task</li></ul>"`;
+
+exports[`marked.parseInline br 1`] = `"line1<br>line2"`;
+
+exports[`marked.parseInline codespan 1`] = `"<code>codespan</code>"`;
+
+exports[`marked.parseInline comment 1`] = `"test <!-- comment -->"`;
+
+exports[`marked.parseInline del 1`] = `"<del>del</del>"`;
+
+exports[`marked.parseInline em 1`] = `"<em>em</em>"`;
+
+exports[`marked.parseInline escape 1`] = `"[escaped"`;
+
+exports[`marked.parseInline image 1`] = `"<img src="./test.png" alt="strong em codespan del <!-- comment --> link image">"`;
+
+exports[`marked.parseInline strong 1`] = `"<strong>strong</strong>"`;

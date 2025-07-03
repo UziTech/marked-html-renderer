@@ -25,6 +25,7 @@ export function escapeText(html, encode) {
       return html.replace(other.escapeReplace, getEscapeReplacement);
     }
   } else {
+    /* istanbul ignore else */
     if (other.escapeTestNoEncode.test(html)) {
       return html.replace(other.escapeReplaceNoEncode, getEscapeReplacement);
     }
@@ -37,6 +38,7 @@ export function cleanUrl(href) {
   try {
     href = encodeURI(href).replace(other.percentDecode, '%');
   } catch {
+    /* istanbul ignore next */
     return null;
   }
   return href;
@@ -72,7 +74,14 @@ export const renderer = {
 
   html({ text }) {
     // HTML should be handled by the blockHtml and inlineHtml extensions in extension.js
+    // Handle comments
+    const comment = /^<!--([\s\S]*?)-->/.exec(text);
+    /* istanbul ignore else */
+    if (comment) {
+      return document.createComment(comment[1]);
+    }
     // If it is not just assume it is text.
+    /* istanbul ignore next */
     return text;
   },
 
@@ -109,12 +118,15 @@ export const renderer = {
     if (item.task) {
       const checkbox = this.checkbox({ checked: !!item.checked });
       if (item.loose) {
-        if (item.tokens[0]?.type === 'paragraph') {
+        if (item.tokens[0]?.type === 'text') {
+          out.firstChild.prepend(document.createTextNode(' '));
           out.firstChild.prepend(checkbox);
         } else {
+          out.prepend(document.createTextNode(' '));
           out.prepend(checkbox);
         }
       } else {
+        out.prepend(document.createTextNode(' '));
         out.prepend(checkbox);
       }
     }
@@ -126,6 +138,9 @@ export const renderer = {
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = checked;
+    if (checked) {
+      checkbox.setAttribute('checked', '');
+    }
     checkbox.disabled = true;
     return checkbox;
   },
@@ -219,6 +234,7 @@ export const renderer = {
   link({ href, title, tokens }) {
     const body = this.parser.parseInline(tokens);
     const cleanHref = cleanUrl(href);
+    /* istanbul ignore next */
     if (cleanHref === null) {
       return body;
     }
@@ -233,16 +249,17 @@ export const renderer = {
   },
 
   image({ href, title, text, tokens }) {
-    const body = tokens ? this.parser.parseInline(tokens, textRenderer) : document.createTextNode(text);
+    const body = this.parser.parseInline(tokens, textRenderer);
 
     const cleanHref = cleanUrl(href);
+    /* istanbul ignore next */
     if (cleanHref === null) {
       return document.createTextNode(escapeText(body.textContent));
     }
     href = cleanHref;
     const out = document.createElement('img');
     out.src = href;
-    out.alt = tokens ? body.textContent : text;
+    out.alt = body.textContent;
     if (title) {
       out.title = escapeText(title);
     }
