@@ -25,7 +25,6 @@ export function escapeText(html, encode) {
       return html.replace(other.escapeReplace, getEscapeReplacement);
     }
   } else {
-    /* istanbul ignore else */
     if (other.escapeTestNoEncode.test(html)) {
       return html.replace(other.escapeReplaceNoEncode, getEscapeReplacement);
     }
@@ -35,13 +34,7 @@ export function escapeText(html, encode) {
 }
 
 export function cleanUrl(href) {
-  try {
-    href = encodeURI(href).replace(other.percentDecode, '%');
-  } catch {
-    /* istanbul ignore next */
-    return null;
-  }
-  return href;
+  return encodeURI(href).replace(other.percentDecode, '%');
 }
 
 export const renderer = {
@@ -231,12 +224,7 @@ export const renderer = {
 
   link({ href, title, tokens }) {
     const body = this.parser.parseInline(tokens);
-    const cleanHref = cleanUrl(href);
-    /* istanbul ignore next */
-    if (cleanHref === null) {
-      return body;
-    }
-    href = cleanHref;
+    href = cleanUrl(href);
     const out = document.createElement('a');
     out.href = href;
     if (title) {
@@ -249,12 +237,7 @@ export const renderer = {
   image({ href, title, text, tokens }) {
     const body = this.parser.parseInline(tokens, textRenderer);
 
-    const cleanHref = cleanUrl(href);
-    /* istanbul ignore next */
-    if (cleanHref === null) {
-      return document.createTextNode(escapeText(body.textContent));
-    }
-    href = cleanHref;
+    href = cleanUrl(href);
     const out = document.createElement('img');
     out.src = href;
     out.alt = body.textContent;

@@ -63,6 +63,8 @@ describe('marked.parseInline', () => {
     escape: '\\[escaped',
     comment: 'test <!-- comment -->',
     image: '![__strong__ *em* `codespan` ~~del~~ <!-- comment --> [link](./test.html) ![image](./test.png)](./test.png)',
+    'image with title': '![alt text](test.png "image title")',
+    'link with title': '[link text](test.html "link title")',
   };
 
   Object.entries(simpleInlineTests).forEach(([name, markdown]) => {
