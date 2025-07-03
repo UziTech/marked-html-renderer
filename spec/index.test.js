@@ -1,8 +1,12 @@
+import { JSDOM } from 'jsdom';
 import { Marked } from 'marked';
 import markedHtmlRenderer from '../src/index.js';
 import { getInnerHTML, readMarkdownFile } from './helpers.js';
+import { suite, test } from 'node:test';
 
-describe('marked.parse', () => {
+globalThis.document = new JSDOM().window.document;
+
+suite('marked.parse', () => {
   const simpleBlockTests = {
     table: `
 | a | b | c |
@@ -38,23 +42,23 @@ multiline comment
 `,
     html: '<div>',
   };
-  test('reference.md', async() => {
+  test('reference.md', async(t) => {
     const marked = new Marked();
     const markdown = await readMarkdownFile('reference.md');
     marked.use(markedHtmlRenderer());
-    expect(getInnerHTML(marked.parse(markdown))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
   });
 
   Object.entries(simpleBlockTests).forEach(([name, markdown]) => {
-    test(name, async() => {
+    test(name, (t) => {
       const marked = new Marked();
       marked.use(markedHtmlRenderer());
-      expect(getInnerHTML(marked.parse(markdown))).toMatchSnapshot();
+      t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
     });
   });
 });
 
-describe('marked.parseInline', () => {
+suite('marked.parseInline', () => {
   const simpleInlineTests = {
     strong: '__strong__',
     em: '*em*',
@@ -68,28 +72,28 @@ describe('marked.parseInline', () => {
   };
 
   Object.entries(simpleInlineTests).forEach(([name, markdown]) => {
-    test(name, async() => {
+    test(name, (t) => {
       const marked = new Marked();
       marked.use(markedHtmlRenderer());
-      expect(getInnerHTML(marked.parseInline(markdown))).toMatchSnapshot();
+      t.assert.snapshot(getInnerHTML(marked.parseInline(markdown)));
     });
   });
 
-  test('br', async() => {
+  test('br', (t) => {
     const marked = new Marked({ breaks: true });
     marked.use(markedHtmlRenderer());
-    expect(getInnerHTML(marked.parseInline('line1\nline2'))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(marked.parseInline('line1\nline2')));
   });
 
-  test('text renderer br', async() => {
+  test('text renderer br', (t) => {
     const marked = new Marked({ breaks: true });
     marked.use(markedHtmlRenderer());
-    expect(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)'))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)')));
   });
 });
 
-describe('extensions', () => {
-  test('fallback', async() => {
+suite('extensions', () => {
+  test('fallback renderer', (t) => {
     const renderer = {
       paragraph() {
         return false;
@@ -101,10 +105,10 @@ describe('extensions', () => {
     const marked = new Marked();
     const markdown = '*test*';
     marked.use(markedHtmlRenderer(), { renderer });
-    expect(getInnerHTML(marked.parse(markdown))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
   });
 
-  test('fallback', async() => {
+  test('fallback extension', (t) => {
     const extensions = [
       {
         name: 'paragraph',
@@ -124,6 +128,6 @@ describe('extensions', () => {
     const marked = new Marked();
     const markdown = '*test*';
     marked.use(markedHtmlRenderer(), { extensions });
-    expect(getInnerHTML(marked.parse(markdown))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
   });
 });

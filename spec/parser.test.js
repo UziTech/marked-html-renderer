@@ -1,9 +1,13 @@
+import { JSDOM } from 'jsdom';
 import { Parser } from '../src/parser.js';
 import { renderer } from '../src/renderer.js';
 import { getInnerHTML } from './helpers.js';
+import { suite, test } from 'node:test';
 
-describe('Parser', () => {
-  test('multiple text tokens', () => {
+globalThis.document = new JSDOM().window.document;
+
+suite('Parser', () => {
+  test('multiple text tokens', (t) => {
     const parser = new Parser({ renderer });
     const tokens = [
       {
@@ -18,10 +22,10 @@ describe('Parser', () => {
       },
     ];
 
-    expect(getInnerHTML(parser.parse(tokens))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
   });
 
-  test('escaped code', () => {
+  test('escaped code', (t) => {
     const parser = new Parser({ renderer });
     const tokens = [
       {
@@ -32,10 +36,10 @@ describe('Parser', () => {
       },
     ];
 
-    expect(getInnerHTML(parser.parse(tokens))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
   });
 
-  test('invalid block token type', () => {
+  test('invalid block token type', (t) => {
     const parser = new Parser({ renderer });
     const tokens = [
       {
@@ -43,10 +47,10 @@ describe('Parser', () => {
       },
     ];
 
-    expect(() => getInnerHTML(parser.parse(tokens))).toThrow('Token with "invalid" type was not found.');
+    t.assert.throws(() => getInnerHTML(parser.parse(tokens)), Error('Token with "invalid" type was not found.'));
   });
 
-  test('invalid block token type silent', () => {
+  test('invalid block token type silent', (t) => {
     const parser = new Parser({ renderer, silent: true });
     const tokens = [
       {
@@ -54,10 +58,10 @@ describe('Parser', () => {
       },
     ];
 
-    expect(getInnerHTML(parser.parse(tokens))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
   });
 
-  test('invalid inline token type', () => {
+  test('invalid inline token type', (t) => {
     const parser = new Parser({ renderer });
     const tokens = [
       {
@@ -65,10 +69,10 @@ describe('Parser', () => {
       },
     ];
 
-    expect(() => getInnerHTML(parser.parseInline(tokens))).toThrow('Token with "invalid" type was not found.');
+    t.assert.throws(() => getInnerHTML(parser.parseInline(tokens)), Error('Token with "invalid" type was not found.'));
   });
 
-  test('invalid inline token type silent', () => {
+  test('invalid inline token type silent', (t) => {
     const parser = new Parser({ renderer, silent: true });
     const tokens = [
       {
@@ -76,6 +80,6 @@ describe('Parser', () => {
       },
     ];
 
-    expect(getInnerHTML(parser.parseInline(tokens))).toMatchSnapshot();
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens)));
   });
 });
