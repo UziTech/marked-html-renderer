@@ -50,7 +50,7 @@ multiline comment
   });
 
   Object.entries(simpleBlockTests).forEach(([name, markdown]) => {
-    test(name, async(t) => {
+    test(name, (t) => {
       const marked = new Marked();
       marked.use(markedHtmlRenderer());
       t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
@@ -72,20 +72,20 @@ suite('marked.parseInline', () => {
   };
 
   Object.entries(simpleInlineTests).forEach(([name, markdown]) => {
-    test(name, async(t) => {
+    test(name, (t) => {
       const marked = new Marked();
       marked.use(markedHtmlRenderer());
       t.assert.snapshot(getInnerHTML(marked.parseInline(markdown)));
     });
   });
 
-  test('br', async(t) => {
+  test('br', (t) => {
     const marked = new Marked({ breaks: true });
     marked.use(markedHtmlRenderer());
     t.assert.snapshot(getInnerHTML(marked.parseInline('line1\nline2')));
   });
 
-  test('text renderer br', async(t) => {
+  test('text renderer br', (t) => {
     const marked = new Marked({ breaks: true });
     marked.use(markedHtmlRenderer());
     t.assert.snapshot(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)')));
@@ -93,7 +93,7 @@ suite('marked.parseInline', () => {
 });
 
 suite('extensions', () => {
-  test('fallback', async(t) => {
+  test('fallback renderer', (t) => {
     const renderer = {
       paragraph() {
         return false;
@@ -108,7 +108,7 @@ suite('extensions', () => {
     t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
   });
 
-  test('fallback', async(t) => {
+  test('fallback extension', (t) => {
     const extensions = [
       {
         name: 'paragraph',

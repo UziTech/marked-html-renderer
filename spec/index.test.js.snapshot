@@ -1,8 +1,8 @@
-exports[`extensions > fallback 1`] = `
+exports[`extensions > fallback extension 1`] = `
 "<p><em>test</em></p>"
 `;
 
-exports[`extensions > fallback 2`] = `
+exports[`extensions > fallback renderer 1`] = `
 "<p><em>test</em></p>"
 `;
 
