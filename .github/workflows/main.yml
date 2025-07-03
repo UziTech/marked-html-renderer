@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
 
   Test:
@@ -65,6 +68,9 @@ jobs:
         run: npm run build
 
   Release:
+    permissions:
+      contents: write
+      id-token: write
     needs: [Test, Coverage, Lint, Build]
     if: |
       github.ref == 'refs/heads/main' &&
