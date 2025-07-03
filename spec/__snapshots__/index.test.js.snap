@@ -79,3 +79,5 @@ exports[`marked.parseInline image with title 1`] = `"<img src="test.png" alt="al
 exports[`marked.parseInline link with title 1`] = `"<a href="test.html" title="link title">link text</a>"`;
 
 exports[`marked.parseInline strong 1`] = `"<strong>strong</strong>"`;
+
+exports[`marked.parseInline text renderer br 1`] = `"<img src="test.png" alt="multilineimage">"`;

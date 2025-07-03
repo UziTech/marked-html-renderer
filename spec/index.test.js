@@ -80,6 +80,12 @@ describe('marked.parseInline', () => {
     marked.use(markedHtmlRenderer());
     expect(getInnerHTML(marked.parseInline('line1\nline2'))).toMatchSnapshot();
   });
+
+  test('text renderer br', async() => {
+    const marked = new Marked({ breaks: true });
+    marked.use(markedHtmlRenderer());
+    expect(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)'))).toMatchSnapshot();
+  });
 });
 
 describe('extensions', () => {

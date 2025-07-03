@@ -32,7 +32,6 @@ export const textRenderer = {
     return '' + text;
   },
 
-  /* istanbul ignore next */
   br() {
     return '';
   },
