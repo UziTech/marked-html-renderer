@@ -25,9 +25,11 @@
     "build": "rollup -c rollup.config.js",
     "format": "eslint --fix",
     "lint": "eslint",
-    "test": "node --test --test-reporter=spec spec/*.test.js",
-    "test:update": "node --test --test-update-snapshots --test-reporter=spec spec/*.test.js",
-    "test:cover": "node --experimental-test-coverage --test-coverage-lines 100 --test-coverage-branches 100 --test-coverage-functions 100 --test --test-reporter=spec spec/*.test.js"
+    "test": "node ./spec/test.config.js",
+    "test:update": "node --test-update-snapshots ./spec/test.config.js",
+    "test:cover": "node --experimental-test-coverage ./spec/test.config.js -- --cover",
+    "test:only": "node ./spec/test.config.js -- --only",
+    "test:only:update": "node --test-update-snapshots ./spec/test.config.js -- --only"
   },
   "repository": {
     "type": "git",
