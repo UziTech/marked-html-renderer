@@ -85,11 +85,11 @@ suite('marked.parseInline', () => {
     t.assert.snapshot(getInnerHTML(marked.parseInline('line1\nline2')));
   });
 
-  // test('text renderer br', async(t) => {
-  //   const marked = new Marked({ breaks: true });
-  //   marked.use(markedHtmlRenderer());
-  //   t.assert.snapshot(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)')));
-  // });
+  test('text renderer br', async(t) => {
+    const marked = new Marked({ breaks: true });
+    marked.use(markedHtmlRenderer());
+    t.assert.snapshot(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)')));
+  });
 });
 
 suite('extensions', () => {
