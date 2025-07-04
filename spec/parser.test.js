@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
-import { Parser } from '../src/parser.js';
-import { renderer } from '../src/renderer.js';
+import { Parser } from '../src/parser.ts';
+import { renderer } from '../src/renderer.ts';
 import { getInnerHTML } from './helpers.js';
 import { suite, test } from 'node:test';
 

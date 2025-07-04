@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { Marked } from 'marked';
-import markedHtmlRenderer from '../src/index.js';
+import markedHtmlRenderer from '../src/index.ts';
 import { getInnerHTML, readMarkdownFile } from './helpers.js';
 import { suite, test } from 'node:test';
 
