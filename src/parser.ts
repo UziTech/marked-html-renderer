@@ -1,13 +1,14 @@
 import type { MarkedOptions, Token, Tokens, MarkedToken, TextRenderer, Renderer, Parser as MarkedParser } from 'marked';
 import { textRenderer } from './textRenderer.ts';
+import { renderer } from './renderer.ts';
 
 export class Parser {
   options: MarkedOptions<DocumentFragment, Node | string>;
   renderer: Renderer<DocumentFragment, Node | string>;
   textRenderer: TextRenderer<Node | string>;
 
-  constructor(options: MarkedOptions<DocumentFragment, Node | string>) {
-    this.options = options;
+  constructor(options: MarkedOptions<DocumentFragment, Node | string> | undefined) {
+    this.options = options ?? { renderer };
     this.textRenderer = textRenderer;
     this.renderer = this.options.renderer!;
     this.renderer.parser = this as unknown as MarkedParser<DocumentFragment, Node | string>;
@@ -16,7 +17,7 @@ export class Parser {
   /**
    * Static Parse Method
    */
-  static parse(tokens: Token[], options: MarkedOptions<DocumentFragment, Node | string>) {
+  static parse(tokens: Token[], options?: MarkedOptions<DocumentFragment, Node | string>) {
     const parser = new Parser(options);
     return parser.parse(tokens);
   }
@@ -24,7 +25,7 @@ export class Parser {
   /**
    * Static Parse Inline Method
    */
-  static parseInline(tokens: Token[], options: MarkedOptions<DocumentFragment, Node | string>) {
+  static parseInline(tokens: Token[], options?: MarkedOptions<DocumentFragment, Node | string>) {
     const parser = new Parser(options);
     return parser.parseInline(tokens);
   }
