@@ -1,4 +1,6 @@
-export const textRenderer = {
+import type { TextRenderer } from 'marked';
+
+export const textRenderer: TextRenderer<Node | string> = {
   // no need for block level renderers
   strong({ text }) {
     return text;
