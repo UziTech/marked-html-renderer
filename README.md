@@ -28,6 +28,6 @@ import markedHtmlRenderer from "marked-html-renderer";
 const marked = new Marked<DocumentFragment, Node | string>();
 marked.use(markedHtmlRenderer());
 
-const htmlElements = marked.parse("# example html"); // returns a DocumentFragment
+const htmlElements: DocumentFragment = marked.parse('# example html', { async: false });
 document.body.append(htmlElements);
 ```
