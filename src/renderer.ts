@@ -1,4 +1,4 @@
-import { textRenderer } from './textRenderer.js';
+import type { Renderer, MarkedOptions, Parser } from 'marked';
 
 export const other = {
   escapeTest: /[&<>"']/,
@@ -10,16 +10,16 @@ export const other = {
   endingNewline: /\n$/,
 };
 
-const escapeReplacements = {
+const escapeReplacements: Record<string, string> = {
   '&': '&amp;',
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
   "'": '&#39;',
-};
-const getEscapeReplacement = (ch) => escapeReplacements[ch];
+} as const;
+const getEscapeReplacement = (ch: string) => escapeReplacements[ch];
 
-export function escapeText(html, encode) {
+export function escapeText(html: string, encode?: boolean) {
   if (encode) {
     if (other.escapeTest.test(html)) {
       return html.replace(other.escapeReplace, getEscapeReplacement);
@@ -33,13 +33,17 @@ export function escapeText(html, encode) {
   return html;
 }
 
-export function cleanUrl(href) {
+export function cleanUrl(href: string) {
   return encodeURI(href).replace(other.percentDecode, '%');
 }
 
-export const renderer = {
+export const renderer: Renderer<DocumentFragment, Node | string> = {
+  options: null as unknown as MarkedOptions<DocumentFragment, Node | string>,
+  parser: null as unknown as Parser<DocumentFragment, Node | string>,
 
-  space() {},
+  space() {
+    return '';
+  },
 
   code({ text, lang, escaped }) {
     const langString = (lang || '').match(other.notSpaceStart)?.[0];
@@ -88,7 +92,7 @@ export const renderer = {
 
   list(token) {
     const ordered = token.ordered;
-    const start = token.start;
+    const start = token.start.toString();
 
     const out = document.createElement(ordered ? 'ol' : 'ul');
     for (let j = 0; j < token.items.length; j++) {
@@ -96,7 +100,7 @@ export const renderer = {
       out.append(this.listitem(item));
     }
 
-    if (ordered && start !== 1) {
+    if (ordered && start !== '1') {
       out.setAttribute('start', start);
     }
 
@@ -110,14 +114,14 @@ export const renderer = {
       const checkbox = this.checkbox({ checked: !!item.checked });
       if (item.loose) {
         if (item.tokens[0]?.type === 'text') {
-          out.firstChild.prepend(document.createTextNode(' '));
-          out.firstChild.prepend(checkbox);
+          (out.firstChild as HTMLElement).prepend(' ');
+          (out.firstChild as HTMLElement).prepend(checkbox);
         } else {
-          out.prepend(document.createTextNode(' '));
+          out.prepend(' ');
           out.prepend(checkbox);
         }
       } else {
-        out.prepend(document.createTextNode(' '));
+        out.prepend(' ');
         out.prepend(checkbox);
       }
     }
@@ -235,12 +239,12 @@ export const renderer = {
   },
 
   image({ href, title, text, tokens }) {
-    const body = this.parser.parseInline(tokens, textRenderer);
+    const body = this.parser.parseInline(tokens, this.parser.textRenderer);
 
     href = cleanUrl(href);
     const out = document.createElement('img');
     out.src = href;
-    out.alt = body.textContent;
+    out.alt = body.textContent ?? '';
     if (title) {
       out.title = escapeText(title);
     }
@@ -249,7 +253,7 @@ export const renderer = {
   },
 
   text(token) {
-    return token.tokens
+    return ('tokens' in token) && token.tokens
       ? this.parser.parseInline(token.tokens)
       : document.createTextNode(token.text);
   },
