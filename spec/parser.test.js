@@ -26,7 +26,7 @@ suite('Parser', () => {
   });
 
   test('escaped code', (t) => {
-    const parser = new Parser({ renderer });
+    const parser = new Parser();
     const tokens = [
       {
         type: 'code',
@@ -40,7 +40,7 @@ suite('Parser', () => {
   });
 
   test('invalid block token type', (t) => {
-    const parser = new Parser({ renderer });
+    const parser = new Parser();
     const tokens = [
       {
         type: 'invalid',
@@ -62,7 +62,7 @@ suite('Parser', () => {
   });
 
   test('invalid inline token type', (t) => {
-    const parser = new Parser({ renderer });
+    const parser = new Parser();
     const tokens = [
       {
         type: 'invalid',
