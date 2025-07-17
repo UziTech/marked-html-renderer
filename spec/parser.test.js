@@ -8,7 +8,7 @@ globalThis.document = new JSDOM().window.document;
 
 suite('Parser', () => {
   test('multiple text tokens', (t) => {
-    const parser = new Parser({ renderer });
+    const parser = new Parser();
     const tokens = [
       {
         type: 'text',

@@ -70,6 +70,10 @@ exports[`marked.parseInline > image 1`] = `
 "<img src=\\"./test.png\\" alt=\\"strong em codespan del <!-- comment --> link image\\">"
 `;
 
+exports[`marked.parseInline > image no alt 1`] = `
+"<img src=\\"test.png\\" alt=\\"\\">"
+`;
+
 exports[`marked.parseInline > image with title 1`] = `
 "<img src=\\"test.png\\" alt=\\"alt text\\" title=\\"image title\\">"
 `;

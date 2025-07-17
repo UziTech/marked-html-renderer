@@ -244,7 +244,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     href = cleanUrl(href);
     const out = document.createElement('img');
     out.src = href;
-    out.alt = body.textContent ?? '';
+    out.alt = body.textContent || '';
     if (title) {
       out.title = escapeText(title);
     }
