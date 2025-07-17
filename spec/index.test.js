@@ -1,6 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { Marked } from 'marked';
-import markedHtmlRenderer from '../src/index.js';
+import markedHtmlRenderer from '../src/index.ts';
 import { getInnerHTML, readMarkdownFile } from './helpers.js';
 import { suite, test } from 'node:test';
 
@@ -69,6 +69,7 @@ suite('marked.parseInline', () => {
     image: '![__strong__ *em* `codespan` ~~del~~ <!-- comment --> [link](./test.html) ![image](./test.png)](./test.png)',
     'image with title': '![alt text](test.png "image title")',
     'link with title': '[link text](test.html "link title")',
+    'image no alt': '![](test.png)',
   };
 
   Object.entries(simpleInlineTests).forEach(([name, markdown]) => {
