@@ -1,6 +1,6 @@
 {
   "name": "marked-html-renderer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "marked HTML renderer",
   "main": "./src/index.js",
   "module": "./src/index.js",
