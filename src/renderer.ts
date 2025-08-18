@@ -80,6 +80,10 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     return text;
   },
 
+  def() {
+    return '';
+  },
+
   heading({ tokens, depth }) {
     const heading = document.createElement('h' + depth);
     heading.append(this.parser.parseInline(tokens));

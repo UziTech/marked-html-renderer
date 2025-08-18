@@ -87,6 +87,10 @@ export class Parser {
           this.appendOutput(out, this.renderer!.html(token));
           continue;
         }
+        case 'def': {
+          this.appendOutput(out, this.renderer!.def(token));
+          continue;
+        }
         case 'paragraph': {
           this.appendOutput(out, this.renderer!.paragraph(token));
           continue;
