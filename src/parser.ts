@@ -88,8 +88,8 @@ export class Parser {
           continue;
         }
         case 'def': {
-          this.appendOutput(out, renderer!.def(token));
-          break;
+          this.appendOutput(out, this.renderer!.def(token));
+          continue;
         }
         case 'paragraph': {
           this.appendOutput(out, this.renderer!.paragraph(token));
