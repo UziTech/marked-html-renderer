@@ -61,7 +61,7 @@
     "esbuild-plugin-umd-wrapper": "^3.0.0",
     "eslint": "^9.37.0",
     "jsdom": "^27.0.0",
-    "marked": "^16.3.0",
+    "marked": "^16.4.0",
     "semantic-release": "^24.2.9"
   }
 }
