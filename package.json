@@ -45,7 +45,7 @@
   },
   "homepage": "https://github.com/UziTech/marked-html-renderer#readme",
   "peerDependencies": {
-    "marked": ">=16 <17"
+    "marked": ">=16 <18"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
@@ -61,7 +61,7 @@
     "esbuild-plugin-umd-wrapper": "^3.0.0",
     "eslint": "^9.39.0",
     "jsdom": "^27.1.0",
-    "marked": "^16.4.1",
+    "marked": "^17.0.0",
     "semantic-release": "^25.0.1"
   }
 }
