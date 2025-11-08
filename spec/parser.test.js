@@ -4,7 +4,6 @@ import { renderer } from '../src/renderer.ts';
 import { textRenderer } from '../src/textRenderer.ts';
 import { getInnerHTML } from './helpers.js';
 import { suite, test } from 'node:test';
-import { text } from 'stream/consumers';
 
 globalThis.document = new JSDOM().window.document;
 
