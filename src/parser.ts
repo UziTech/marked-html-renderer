@@ -1,4 +1,4 @@
-import type { MarkedOptions, Token, Tokens, MarkedToken, TextRenderer, Renderer, Parser as MarkedParser } from 'marked';
+import type { MarkedOptions, Token, MarkedToken, TextRenderer, Renderer, Parser as MarkedParser } from 'marked';
 import { textRenderer } from './textRenderer.ts';
 import { renderer } from './renderer.ts';
 
