@@ -19,7 +19,7 @@ exports[`marked.parse > html 1`] = `
 `;
 
 exports[`marked.parse > loose task list 1`] = `
-"<ul><li><p><input type=\\"checkbox\\" disabled=\\"\\"> task</p></li><li><input type=\\"checkbox\\" checked=\\"\\" disabled=\\"\\"> <h1>loose</h1></li></ul>"
+"<ul><li><p><input type=\\"checkbox\\" disabled=\\"\\"> task</p></li><li><p><input type=\\"checkbox\\" checked=\\"\\" disabled=\\"\\"> </p><h1>loose</h1></li></ul>"
 `;
 
 exports[`marked.parse > ordered list not starting at 1 1`] = `

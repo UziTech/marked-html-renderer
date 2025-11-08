@@ -113,22 +113,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
 
   listitem(item) {
     const out = document.createElement('li');
-    out.append(this.parser.parse(item.tokens, !!item.loose));
-    if (item.task) {
-      const checkbox = this.checkbox({ checked: !!item.checked });
-      if (item.loose) {
-        if (item.tokens[0]?.type === 'text') {
-          (out.firstChild as HTMLElement).prepend(' ');
-          (out.firstChild as HTMLElement).prepend(checkbox);
-        } else {
-          out.prepend(' ');
-          out.prepend(checkbox);
-        }
-      } else {
-        out.prepend(' ');
-        out.prepend(checkbox);
-      }
-    }
+    out.append(this.parser.parse(item.tokens));
 
     return out;
   },

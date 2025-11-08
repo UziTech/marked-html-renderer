@@ -37,4 +37,8 @@ export const textRenderer: TextRenderer<Node | string> = {
   br() {
     return '';
   },
+
+  checkbox({ raw }) {
+    return raw;
+  },
 };
