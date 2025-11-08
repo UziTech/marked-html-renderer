@@ -1,3 +1,7 @@
+exports[`Parser > checkbox textRenderer 1`] = `
+"[ ] "
+`;
+
 exports[`Parser > escaped code 1`] = `
 "<pre><code>code\\n</code></pre>"
 `;
@@ -11,5 +15,17 @@ exports[`Parser > invalid inline token type silent 1`] = `
 `;
 
 exports[`Parser > multiple text tokens 1`] = `
-"<p>text\\ntext2</p>"
+"texttext2"
+`;
+
+exports[`Parser > no renderer 1`] = `
+"text"
+`;
+
+exports[`Parser > no renderer parse 1`] = `
+"text"
+`;
+
+exports[`Parser > no renderer parseinline 1`] = `
+"text"
 `;
