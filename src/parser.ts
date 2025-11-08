@@ -10,7 +10,7 @@ export class Parser {
   constructor(options: MarkedOptions<DocumentFragment, Node | string> | undefined) {
     this.options = options ?? { renderer };
     this.textRenderer = textRenderer;
-    this.renderer = this.options.renderer!;
+    this.renderer = this.options.renderer ?? renderer;
     this.renderer.parser = this as unknown as MarkedParser<DocumentFragment, Node | string>;
   }
 
@@ -55,7 +55,7 @@ export class Parser {
       const token = anyToken as MarkedToken;
 
       if (!this.renderer) {
-        throw new Error('No renderer found.');
+        this.renderer = this.options.renderer ?? renderer;
       }
 
       switch (token.type) {
@@ -143,8 +143,8 @@ export class Parser {
 
       const token = anyToken as MarkedToken;
 
-      if (!this.renderer) {
-        throw new Error('No renderer found.');
+      if (!renderer) {
+        renderer = this.renderer ?? this.options.renderer ?? renderer;
       }
 
       switch (token.type) {
@@ -165,7 +165,7 @@ export class Parser {
           break;
         }
         case 'checkbox': {
-          this.appendOutput(out, this.renderer.checkbox(token));
+          this.appendOutput(out, renderer.checkbox(token));
           this.appendOutput(out, document.createTextNode(' '));
           continue;
         }
