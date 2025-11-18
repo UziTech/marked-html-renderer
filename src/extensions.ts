@@ -18,7 +18,7 @@ export const blockHtml = (libOptions?: MarkedHTMLRendererOptions): TokenizerAndR
     }
   },
   renderer({ raw }) {
-    const template = (libOptions?.dom ?? document).createElement('template');
+    const template = (libOptions?.document ?? document).createElement('template');
     template.innerHTML = raw;
     return template.content;
   },
@@ -41,7 +41,7 @@ export const inlineHtml = (libOptions?: MarkedHTMLRendererOptions): TokenizerAnd
     }
   },
   renderer({ raw, tokens }) {
-    const template = (libOptions?.dom ?? document).createElement('template');
+    const template = (libOptions?.document ?? document).createElement('template');
     template.innerHTML = raw;
     const out = template.content.firstChild as HTMLElement;
     out.innerHTML = '';
