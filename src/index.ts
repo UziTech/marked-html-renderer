@@ -4,7 +4,7 @@ import { createRenderer } from './renderer.ts';
 import { blockHtml, inlineHtml } from './extensions.ts';
 
 export type MarkedHTMLRendererOptions = {
-  dom?: Document;
+  document?: Document;
 };
 
 export default function(libOptions?: MarkedHTMLRendererOptions): MarkedExtension<DocumentFragment, Node | string> {
@@ -23,7 +23,7 @@ export default function(libOptions?: MarkedHTMLRendererOptions): MarkedExtension
       },
     },
     renderer: createRenderer({
-      dom: libOptions?.dom ?? document,
+      document: libOptions?.document ?? document,
     }),
     extensions: [
       blockHtml(libOptions),

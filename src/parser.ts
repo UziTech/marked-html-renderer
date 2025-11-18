@@ -9,11 +9,11 @@ export class Parser {
   options: ParserOptions;
   renderer: Renderer<DocumentFragment, Node | string>;
   textRenderer: TextRenderer<Node | string>;
-  dom: Document;
+  document: Document;
 
   constructor(options: ParserOptions | undefined) {
-    this.dom = options?.dom ?? document;
-    const renderer = options?.renderer ?? createRenderer({ dom: this.dom });
+    this.document = options?.document ?? document;
+    const renderer = options?.renderer ?? createRenderer({ document: this.document });
     this.options = options ?? { renderer };
     this.textRenderer = textRenderer;
     this.renderer = this.options.renderer ?? renderer;
@@ -43,7 +43,7 @@ export class Parser {
   }
 
   parse(tokens: Token[], top = true) {
-    const out = this.dom.createDocumentFragment();
+    const out = this.document.createDocumentFragment();
 
     for (let i = 0; i < tokens.length; i++) {
       const anyToken = tokens[i];
@@ -61,7 +61,7 @@ export class Parser {
       const token = anyToken as MarkedToken;
 
       if (!this.renderer) {
-        this.renderer = this.options.renderer ?? createRenderer({ dom: this.dom });
+        this.renderer = this.options.renderer ?? createRenderer({ document: this.document });
       }
 
       switch (token.type) {
@@ -95,7 +95,7 @@ export class Parser {
         }
         case 'checkbox': {
           this.appendOutput(out, this.renderer.checkbox(token));
-          this.appendOutput(out, this.dom.createTextNode(' '));
+          this.appendOutput(out, this.document.createTextNode(' '));
           continue;
         }
         case 'html': {
@@ -118,7 +118,7 @@ export class Parser {
           const errMsg = 'Token with "' + token.type + '" type was not found.';
           if (this.options.silent) {
             console.error(errMsg);
-            return this.dom.createDocumentFragment();
+            return this.document.createDocumentFragment();
           } else {
             throw new Error(errMsg);
           }
@@ -133,7 +133,7 @@ export class Parser {
    * Parse Inline Tokens
    */
   parseInline(tokens: Token[], renderer = this.renderer) {
-    const out = this.dom.createDocumentFragment();
+    const out = this.document.createDocumentFragment();
 
     for (let i = 0; i < tokens.length; i++) {
       const anyToken = tokens[i];
@@ -172,7 +172,7 @@ export class Parser {
         }
         case 'checkbox': {
           this.appendOutput(out, renderer.checkbox(token));
-          this.appendOutput(out, this.dom.createTextNode(' '));
+          this.appendOutput(out, this.document.createTextNode(' '));
           continue;
         }
         case 'strong': {
@@ -203,7 +203,7 @@ export class Parser {
           const errMsg = 'Token with "' + token.type + '" type was not found.';
           if (this.options.silent) {
             console.error(errMsg);
-            return this.dom.createDocumentFragment();
+            return this.document.createDocumentFragment();
           } else {
             throw new Error(errMsg);
           }

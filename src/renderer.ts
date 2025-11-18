@@ -38,7 +38,7 @@ export function cleanUrl(href: string) {
   return encodeURI(href).replace(other.percentDecode, '%');
 }
 
-export const createRenderer = ({ dom }: Required<MarkedHTMLRendererOptions>): Renderer<DocumentFragment, Node | string> => ({
+export const createRenderer = ({ document: dom }: Required<MarkedHTMLRendererOptions>): Renderer<DocumentFragment, Node | string> => ({
   options: null as unknown as MarkedOptions<DocumentFragment, Node | string>,
   parser: null as unknown as Parser<DocumentFragment, Node | string>,
 

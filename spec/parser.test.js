@@ -9,7 +9,7 @@ const dom = new JSDOM().window.document;
 
 suite('Parser', () => {
   test('multiple text tokens', (t) => {
-    const parser = new Parser({ dom });
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'text',
@@ -27,7 +27,7 @@ suite('Parser', () => {
   });
 
   test('escaped code', (t) => {
-    const parser = new Parser({ dom });
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'code',
@@ -41,7 +41,7 @@ suite('Parser', () => {
   });
 
   test('invalid block token type', (t) => {
-    const parser = new Parser({ dom });
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'invalid',
@@ -52,7 +52,7 @@ suite('Parser', () => {
   });
 
   test('invalid block token type silent', (t) => {
-    const parser = new Parser({ dom, renderer: createRenderer({ dom }), silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'invalid',
@@ -63,7 +63,7 @@ suite('Parser', () => {
   });
 
   test('invalid inline token type', (t) => {
-    const parser = new Parser({ dom });
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'invalid',
@@ -74,7 +74,7 @@ suite('Parser', () => {
   });
 
   test('invalid inline token type silent', (t) => {
-    const parser = new Parser({ dom, renderer: createRenderer({ dom }), silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'invalid',
@@ -85,7 +85,7 @@ suite('Parser', () => {
   });
 
   test('no renderer parse', (t) => {
-    const parser = new Parser({ dom, renderer: createRenderer({ dom }), silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'text',
@@ -99,7 +99,7 @@ suite('Parser', () => {
   });
 
   test('no renderer parseinline', (t) => {
-    const parser = new Parser({ dom, renderer: createRenderer({ dom }), silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'text',
@@ -113,7 +113,7 @@ suite('Parser', () => {
   });
 
   test('checkbox textRenderer', (t) => {
-    const parser = new Parser({ dom, renderer: createRenderer({ dom }), silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'checkbox',
@@ -126,7 +126,7 @@ suite('Parser', () => {
   });
 
   test('no renderer', (t) => {
-    const parser = new Parser({ dom, silent: true });
+    const parser = new Parser({ document: dom, silent: true });
     const tokens = [
       {
         type: 'text',
