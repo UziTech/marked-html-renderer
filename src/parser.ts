@@ -1,13 +1,19 @@
 import type { MarkedOptions, Token, MarkedToken, TextRenderer, Renderer, Parser as MarkedParser } from 'marked';
 import { textRenderer } from './textRenderer.ts';
-import { renderer } from './renderer.ts';
+import { createRenderer } from './renderer.ts';
+import type { MarkedHTMLRendererOptions } from './index.ts';
+
+export type ParserOptions = MarkedOptions<DocumentFragment, Node | string> & MarkedHTMLRendererOptions;
 
 export class Parser {
-  options: MarkedOptions<DocumentFragment, Node | string>;
+  options: ParserOptions;
   renderer: Renderer<DocumentFragment, Node | string>;
   textRenderer: TextRenderer<Node | string>;
+  dom: Document;
 
-  constructor(options: MarkedOptions<DocumentFragment, Node | string> | undefined) {
+  constructor(options: ParserOptions | undefined) {
+    this.dom = options?.dom ?? document;
+    const renderer = options?.renderer ?? createRenderer({ dom: this.dom });
     this.options = options ?? { renderer };
     this.textRenderer = textRenderer;
     this.renderer = this.options.renderer ?? renderer;
@@ -17,7 +23,7 @@ export class Parser {
   /**
    * Static Parse Method
    */
-  static parse(tokens: Token[], options?: MarkedOptions<DocumentFragment, Node | string>) {
+  static parse(tokens: Token[], options?: ParserOptions) {
     const parser = new Parser(options);
     return parser.parse(tokens);
   }
@@ -25,7 +31,7 @@ export class Parser {
   /**
    * Static Parse Inline Method
    */
-  static parseInline(tokens: Token[], options?: MarkedOptions<DocumentFragment, Node | string>) {
+  static parseInline(tokens: Token[], options?: ParserOptions) {
     const parser = new Parser(options);
     return parser.parseInline(tokens);
   }
@@ -37,7 +43,7 @@ export class Parser {
   }
 
   parse(tokens: Token[], top = true) {
-    const out = document.createDocumentFragment();
+    const out = this.dom.createDocumentFragment();
 
     for (let i = 0; i < tokens.length; i++) {
       const anyToken = tokens[i];
@@ -55,7 +61,7 @@ export class Parser {
       const token = anyToken as MarkedToken;
 
       if (!this.renderer) {
-        this.renderer = this.options.renderer ?? renderer;
+        this.renderer = this.options.renderer ?? createRenderer({ dom: this.dom });
       }
 
       switch (token.type) {
@@ -89,7 +95,7 @@ export class Parser {
         }
         case 'checkbox': {
           this.appendOutput(out, this.renderer.checkbox(token));
-          this.appendOutput(out, document.createTextNode(' '));
+          this.appendOutput(out, this.dom.createTextNode(' '));
           continue;
         }
         case 'html': {
@@ -112,7 +118,7 @@ export class Parser {
           const errMsg = 'Token with "' + token.type + '" type was not found.';
           if (this.options.silent) {
             console.error(errMsg);
-            return document.createDocumentFragment();
+            return this.dom.createDocumentFragment();
           } else {
             throw new Error(errMsg);
           }
@@ -127,7 +133,7 @@ export class Parser {
    * Parse Inline Tokens
    */
   parseInline(tokens: Token[], renderer = this.renderer) {
-    const out = document.createDocumentFragment();
+    const out = this.dom.createDocumentFragment();
 
     for (let i = 0; i < tokens.length; i++) {
       const anyToken = tokens[i];
@@ -166,7 +172,7 @@ export class Parser {
         }
         case 'checkbox': {
           this.appendOutput(out, renderer.checkbox(token));
-          this.appendOutput(out, document.createTextNode(' '));
+          this.appendOutput(out, this.dom.createTextNode(' '));
           continue;
         }
         case 'strong': {
@@ -197,7 +203,7 @@ export class Parser {
           const errMsg = 'Token with "' + token.type + '" type was not found.';
           if (this.options.silent) {
             console.error(errMsg);
-            return document.createDocumentFragment();
+            return this.dom.createDocumentFragment();
           } else {
             throw new Error(errMsg);
           }

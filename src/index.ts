@@ -1,19 +1,33 @@
 import type { MarkedExtension } from 'marked';
 import { Parser } from './parser.ts';
-import { renderer } from './renderer.ts';
+import { createRenderer } from './renderer.ts';
 import { blockHtml, inlineHtml } from './extensions.ts';
 
-export default function(): MarkedExtension<DocumentFragment, Node | string> {
+export type MarkedHTMLRendererOptions = {
+  dom?: Document;
+};
+
+export default function(libOptions?: MarkedHTMLRendererOptions): MarkedExtension<DocumentFragment, Node | string> {
   return {
     hooks: {
       provideParser() {
-        return this.block ? Parser.parse : Parser.parseInline;
+        return (tokens, options) => {
+          const optionsWithDom = {
+            ...options,
+            ...libOptions,
+          };
+          return this.block
+            ? Parser.parse(tokens, optionsWithDom)
+            : Parser.parseInline(tokens, optionsWithDom);
+        };
       },
     },
-    renderer,
+    renderer: createRenderer({
+      dom: libOptions?.dom ?? document,
+    }),
     extensions: [
-      blockHtml,
-      inlineHtml,
+      blockHtml(libOptions),
+      inlineHtml(libOptions),
     ],
   };
 }
