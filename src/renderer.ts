@@ -1,4 +1,5 @@
 import type { Renderer, MarkedOptions, Parser } from 'marked';
+import type { MarkedHTMLRendererOptions } from './index.ts';
 
 export const other = {
   escapeTest: /[&<>"']/,
@@ -37,7 +38,7 @@ export function cleanUrl(href: string) {
   return encodeURI(href).replace(other.percentDecode, '%');
 }
 
-export const renderer: Renderer<DocumentFragment, Node | string> = {
+export const createRenderer = ({ document: dom }: Required<MarkedHTMLRendererOptions>): Renderer<DocumentFragment, Node | string> => ({
   options: null as unknown as MarkedOptions<DocumentFragment, Node | string>,
   parser: null as unknown as Parser<DocumentFragment, Node | string>,
 
@@ -51,8 +52,8 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     let code = text.replace(other.endingNewline, '') + '\n';
     code = (escaped ? code : escapeText(code, true));
 
-    const preEl = document.createElement('pre');
-    const codeEl = document.createElement('code');
+    const preEl = dom.createElement('pre');
+    const codeEl = dom.createElement('code');
     preEl.appendChild(codeEl);
     codeEl.textContent = code;
 
@@ -64,7 +65,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   },
 
   blockquote({ tokens }) {
-    const blockquote = document.createElement('blockquote');
+    const blockquote = dom.createElement('blockquote');
     blockquote.append(this.parser.parse(tokens));
     return blockquote;
   },
@@ -74,7 +75,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     // Handle comments
     const comment = /^<!--([\s\S]*?)-->/.exec(text);
     if (comment) {
-      return document.createComment(comment[1]);
+      return dom.createComment(comment[1]);
     }
     // If it is not just assume it is text.
     return text;
@@ -85,20 +86,20 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   },
 
   heading({ tokens, depth }) {
-    const heading = document.createElement('h' + depth);
+    const heading = dom.createElement('h' + depth);
     heading.append(this.parser.parseInline(tokens));
     return heading;
   },
 
   hr() {
-    return document.createElement('hr');
+    return dom.createElement('hr');
   },
 
   list(token) {
     const ordered = token.ordered;
     const start = token.start.toString();
 
-    const out = document.createElement(ordered ? 'ol' : 'ul');
+    const out = dom.createElement(ordered ? 'ol' : 'ul');
     for (let j = 0; j < token.items.length; j++) {
       const item = token.items[j];
       out.append(this.listitem(item));
@@ -112,14 +113,14 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   },
 
   listitem(item) {
-    const out = document.createElement('li');
+    const out = dom.createElement('li');
     out.append(this.parser.parse(item.tokens));
 
     return out;
   },
 
   checkbox({ checked }) {
-    const checkbox = document.createElement('input');
+    const checkbox = dom.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.checked = checked;
     if (checked) {
@@ -130,16 +131,16 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   },
 
   paragraph({ tokens }) {
-    const paragraph = document.createElement('p');
+    const paragraph = dom.createElement('p');
     paragraph.append(this.parser.parseInline(tokens));
     return paragraph;
   },
 
   table(token) {
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
+    const table = dom.createElement('table');
+    const thead = dom.createElement('thead');
 
-    const headerCell = document.createDocumentFragment();
+    const headerCell = dom.createDocumentFragment();
     for (let j = 0; j < token.header.length; j++) {
       headerCell.append(this.tablecell(token.header[j]));
     }
@@ -150,11 +151,11 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
       return table;
     }
 
-    const tbody = document.createElement('tbody');
+    const tbody = dom.createElement('tbody');
     for (let j = 0; j < token.rows.length; j++) {
       const row = token.rows[j];
 
-      const cell = document.createDocumentFragment();
+      const cell = dom.createDocumentFragment();
       for (let k = 0; k < row.length; k++) {
         cell.append(this.tablecell(row[k]));
       }
@@ -168,14 +169,14 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   },
 
   tablerow({ text }) {
-    const tr = document.createElement('tr');
+    const tr = dom.createElement('tr');
     tr.append(text);
     return tr;
   },
 
   tablecell(token) {
     const content = this.parser.parseInline(token.tokens);
-    const out = document.createElement(token.header ? 'th' : 'td');
+    const out = dom.createElement(token.header ? 'th' : 'td');
     out.append(content);
     if (token.align) {
       out.setAttribute('align', token.align);
@@ -188,29 +189,29 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
    * span level renderer
    */
   strong({ tokens }) {
-    const strong = document.createElement('strong');
+    const strong = dom.createElement('strong');
     strong.append(this.parser.parseInline(tokens));
     return strong;
   },
 
   em({ tokens }) {
-    const em = document.createElement('em');
+    const em = dom.createElement('em');
     em.append(this.parser.parseInline(tokens));
     return em;
   },
 
   codespan({ text }) {
-    const code = document.createElement('code');
+    const code = dom.createElement('code');
     code.innerHTML = escapeText(text, true);
     return code;
   },
 
   br() {
-    return document.createElement('br');
+    return dom.createElement('br');
   },
 
   del({ tokens }) {
-    const del = document.createElement('del');
+    const del = dom.createElement('del');
     del.append(this.parser.parseInline(tokens));
     return del;
   },
@@ -218,7 +219,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   link({ href, title, tokens }) {
     const body = this.parser.parseInline(tokens);
     href = cleanUrl(href);
-    const out = document.createElement('a');
+    const out = dom.createElement('a');
     out.href = href;
     if (title) {
       out.title = title;
@@ -231,7 +232,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     const body = this.parser.parseInline(tokens, this.parser.textRenderer);
 
     href = cleanUrl(href);
-    const out = document.createElement('img');
+    const out = dom.createElement('img');
     out.src = href;
     out.alt = body.textContent || '';
     if (title) {
@@ -244,6 +245,6 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
   text(token) {
     return ('tokens' in token) && token.tokens
       ? this.parser.parseInline(token.tokens)
-      : document.createTextNode(token.text);
+      : dom.createTextNode(token.text);
   },
-};
+});
