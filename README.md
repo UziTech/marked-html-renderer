@@ -31,3 +31,17 @@ marked.use(markedHtmlRenderer());
 const htmlElements: DocumentFragment = marked.parse('# example html', { async: false });
 document.body.append(htmlElements);
 ```
+
+You can also pass an alternate provider for `document`, eg. JSDOM for use in a server-side context.
+
+```ts
+import {Marked} from "marked";
+import markedHtmlRenderer from "marked-html-renderer";
+import { JSDOM } from "jsdom";
+
+const marked = new Marked();
+marked.use(markedHtmlRenderer({ document: new JSDOM('').window.document }));
+
+// DocumentFragment.childNodes contains Elements, where the string representation is childNode.outerHTML
+const htmlElements = marked.parse('# example html');
+```

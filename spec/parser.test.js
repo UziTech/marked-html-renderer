@@ -1,15 +1,15 @@
 import { JSDOM } from 'jsdom';
 import { Parser } from '../src/parser.ts';
-import { renderer } from '../src/renderer.ts';
+import { createRenderer } from '../src/renderer.ts';
 import { textRenderer } from '../src/textRenderer.ts';
 import { getInnerHTML } from './helpers.js';
 import { suite, test } from 'node:test';
 
-globalThis.document = new JSDOM().window.document;
+const dom = new JSDOM().window.document;
 
 suite('Parser', () => {
   test('multiple text tokens', (t) => {
-    const parser = new Parser();
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'text',
@@ -23,11 +23,11 @@ suite('Parser', () => {
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
   });
 
   test('escaped code', (t) => {
-    const parser = new Parser();
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'code',
@@ -37,55 +37,55 @@ suite('Parser', () => {
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
   });
 
   test('invalid block token type', (t) => {
-    const parser = new Parser();
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.throws(() => getInnerHTML(parser.parse(tokens)), Error('Token with "invalid" type was not found.'));
+    t.assert.throws(() => getInnerHTML(parser.parse(tokens), dom), Error('Token with "invalid" type was not found.'));
   });
 
   test('invalid block token type silent', (t) => {
-    const parser = new Parser({ renderer, silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
   });
 
   test('invalid inline token type', (t) => {
-    const parser = new Parser();
+    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.throws(() => getInnerHTML(parser.parseInline(tokens)), Error('Token with "invalid" type was not found.'));
+    t.assert.throws(() => getInnerHTML(parser.parseInline(tokens), dom), Error('Token with "invalid" type was not found.'));
   });
 
   test('invalid inline token type silent', (t) => {
-    const parser = new Parser({ renderer, silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens), dom));
   });
 
   test('no renderer parse', (t) => {
-    const parser = new Parser({ renderer, silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'text',
@@ -95,11 +95,11 @@ suite('Parser', () => {
     ];
 
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
   });
 
   test('no renderer parseinline', (t) => {
-    const parser = new Parser({ renderer, silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'text',
@@ -109,11 +109,11 @@ suite('Parser', () => {
     ];
 
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens), dom));
   });
 
   test('checkbox textRenderer', (t) => {
-    const parser = new Parser({ renderer, silent: true });
+    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'checkbox',
@@ -122,11 +122,11 @@ suite('Parser', () => {
     ];
 
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens, textRenderer)));
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens, textRenderer), dom));
   });
 
   test('no renderer', (t) => {
-    const parser = new Parser({ silent: true });
+    const parser = new Parser({ document: dom, silent: true });
     const tokens = [
       {
         type: 'text',
@@ -136,6 +136,6 @@ suite('Parser', () => {
     ];
 
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
   });
 });
