@@ -5,6 +5,7 @@ import { getInnerHTML, readMarkdownFile } from './helpers.js';
 import { suite, test } from 'node:test';
 
 globalThis.document = new JSDOM().window.document;
+const dom = new JSDOM().window.document;
 
 suite('marked.parse', () => {
   const simpleBlockTests = {
@@ -47,6 +48,8 @@ multiline comment
     const markdown = await readMarkdownFile('reference.md');
     marked.use(markedHtmlRenderer());
     t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
+    marked.use(markedHtmlRenderer({ document: dom }));
+    t.assert.snapshot(getInnerHTML(marked.parse(markdown), dom));
   });
 
   Object.entries(simpleBlockTests).forEach(([name, markdown]) => {
@@ -54,6 +57,8 @@ multiline comment
       const marked = new Marked();
       marked.use(markedHtmlRenderer());
       t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
+      marked.use(markedHtmlRenderer({ document: dom }));
+      t.assert.snapshot(getInnerHTML(marked.parse(markdown), dom));
     });
   });
 });
@@ -77,6 +82,8 @@ suite('marked.parseInline', () => {
       const marked = new Marked();
       marked.use(markedHtmlRenderer());
       t.assert.snapshot(getInnerHTML(marked.parseInline(markdown)));
+      marked.use(markedHtmlRenderer({ document: dom }));
+      t.assert.snapshot(getInnerHTML(marked.parseInline(markdown), dom));
     });
   });
 
@@ -84,12 +91,16 @@ suite('marked.parseInline', () => {
     const marked = new Marked({ breaks: true });
     marked.use(markedHtmlRenderer());
     t.assert.snapshot(getInnerHTML(marked.parseInline('line1\nline2')));
+    marked.use(markedHtmlRenderer({ document: dom }));
+    t.assert.snapshot(getInnerHTML(marked.parseInline('line1\nline2'), dom));
   });
 
   test('text renderer br', (t) => {
     const marked = new Marked({ breaks: true });
     marked.use(markedHtmlRenderer());
     t.assert.snapshot(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)')));
+    marked.use(markedHtmlRenderer({ document: dom }));
+    t.assert.snapshot(getInnerHTML(marked.parseInline('![multiline\nimage](test.png)'), dom));
   });
 });
 
@@ -107,6 +118,8 @@ suite('extensions', () => {
     const markdown = '*test*';
     marked.use(markedHtmlRenderer(), { renderer });
     t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
+    marked.use(markedHtmlRenderer({ document: dom }), { renderer });
+    t.assert.snapshot(getInnerHTML(marked.parse(markdown), dom));
   });
 
   test('fallback extension', (t) => {
@@ -130,5 +143,7 @@ suite('extensions', () => {
     const markdown = '*test*';
     marked.use(markedHtmlRenderer(), { extensions });
     t.assert.snapshot(getInnerHTML(marked.parse(markdown)));
+    marked.use(markedHtmlRenderer({ document: dom }), { extensions });
+    t.assert.snapshot(getInnerHTML(marked.parse(markdown), dom));
   });
 });
