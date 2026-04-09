@@ -34,8 +34,8 @@ suite('Parser', () => {
     const tokens = [
       {
         type: 'code',
-        raw: 'code',
-        text: 'code',
+        raw: '<h1>code</h1>',
+        text: '<h1>code</h1>',
         escaped: true,
       },
     ];
@@ -45,6 +45,19 @@ suite('Parser', () => {
 
     t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
     t.assert.snapshot(getInnerHTML(parserInjectDom.parse(tokens), dom));
+  });
+
+  test('non-escaped code', (t) => {
+    const parser = new Parser();
+    const tokens = [
+      {
+        type: 'code',
+        raw: '<h1>code</h1>',
+        text: '<h1>code</h1>',
+      },
+    ];
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
   });
 
   test('invalid block token type', (t) => {
