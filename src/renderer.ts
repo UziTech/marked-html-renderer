@@ -6,7 +6,6 @@ export const other = {
   endingNewline: /\n$/,
 };
 
-
 export function cleanUrl(href: string) {
   return encodeURI(href).replace(other.percentDecode, '%');
 }
