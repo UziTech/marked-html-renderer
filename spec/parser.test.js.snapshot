@@ -3,7 +3,7 @@ exports[`Parser > checkbox textRenderer 1`] = `
 `;
 
 exports[`Parser > escaped code 1`] = `
-"<pre><code>code\\n</code></pre>"
+"<pre><code><h1>code</h1>\\n</code></pre>"
 `;
 
 exports[`Parser > invalid block token type silent 1`] = `
@@ -28,4 +28,8 @@ exports[`Parser > no renderer parse 1`] = `
 
 exports[`Parser > no renderer parseinline 1`] = `
 "text"
+`;
+
+exports[`Parser > non-escaped code 1`] = `
+"<pre><code>&lt;h1&gt;code&lt;/h1&gt;\\n</code></pre>"
 `;
