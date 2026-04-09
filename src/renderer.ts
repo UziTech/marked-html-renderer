@@ -19,7 +19,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     return '';
   },
 
-  code({ text, lang }) {
+  code({ text, lang, escaped }) {
     const langString = (lang || '').match(other.notSpaceStart)?.[0];
 
     const code = text.replace(other.endingNewline, '') + '\n';
@@ -27,7 +27,11 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     const preEl = document.createElement('pre');
     const codeEl = document.createElement('code');
     preEl.appendChild(codeEl);
-    codeEl.textContent = code;
+    if (escaped) {
+      codeEl.innerHTML = code;
+    } else {
+      codeEl.textContent = code;
+    }
 
     if (langString) {
       preEl.classList.add('language-' + langString);

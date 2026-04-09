@@ -31,9 +31,22 @@ suite('Parser', () => {
     const tokens = [
       {
         type: 'code',
-        raw: 'code',
-        text: 'code',
+        raw: '<h1>code</h1>',
+        text: '<h1>code</h1>',
         escaped: true,
+      },
+    ];
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+  });
+
+  test('non-escaped code', (t) => {
+    const parser = new Parser();
+    const tokens = [
+      {
+        type: 'code',
+        raw: '<h1>code</h1>',
+        text: '<h1>code</h1>',
       },
     ];
 
