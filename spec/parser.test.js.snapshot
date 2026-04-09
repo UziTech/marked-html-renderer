@@ -2,7 +2,15 @@ exports[`Parser > checkbox textRenderer 1`] = `
 "[ ] "
 `;
 
+exports[`Parser > checkbox textRenderer 2`] = `
+"[ ] "
+`;
+
 exports[`Parser > escaped code 1`] = `
+"<pre><code>code\\n</code></pre>"
+`;
+
+exports[`Parser > escaped code 2`] = `
 "<pre><code>code\\n</code></pre>"
 `;
 
@@ -10,7 +18,15 @@ exports[`Parser > invalid block token type silent 1`] = `
 ""
 `;
 
+exports[`Parser > invalid block token type silent 2`] = `
+""
+`;
+
 exports[`Parser > invalid inline token type silent 1`] = `
+""
+`;
+
+exports[`Parser > invalid inline token type silent 2`] = `
 ""
 `;
 
@@ -18,7 +34,15 @@ exports[`Parser > multiple text tokens 1`] = `
 "texttext2"
 `;
 
+exports[`Parser > multiple text tokens 2`] = `
+"texttext2"
+`;
+
 exports[`Parser > no renderer 1`] = `
+"text"
+`;
+
+exports[`Parser > no renderer 2`] = `
 "text"
 `;
 
@@ -26,6 +50,14 @@ exports[`Parser > no renderer parse 1`] = `
 "text"
 `;
 
+exports[`Parser > no renderer parse 2`] = `
+"text"
+`;
+
 exports[`Parser > no renderer parseinline 1`] = `
+"text"
+`;
+
+exports[`Parser > no renderer parseinline 2`] = `
 "text"
 `;

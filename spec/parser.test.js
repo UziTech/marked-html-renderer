@@ -5,11 +5,11 @@ import { textRenderer } from '../src/textRenderer.ts';
 import { getInnerHTML } from './helpers.js';
 import { suite, test } from 'node:test';
 
+globalThis.document = new JSDOM().window.document;
 const dom = new JSDOM().window.document;
 
 suite('Parser', () => {
   test('multiple text tokens', (t) => {
-    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'text',
@@ -23,11 +23,14 @@ suite('Parser', () => {
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
+    const parser = new Parser();
+    const parserInjectDom = new Parser({ document: dom });
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parse(tokens), dom));
   });
 
   test('escaped code', (t) => {
-    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'code',
@@ -37,55 +40,72 @@ suite('Parser', () => {
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
+    const parser = new Parser();
+    const parserInjectDom = new Parser({ document: dom });
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parse(tokens), dom));
   });
 
   test('invalid block token type', (t) => {
-    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.throws(() => getInnerHTML(parser.parse(tokens), dom), Error('Token with "invalid" type was not found.'));
+    const parser = new Parser();
+    const parserInjectDom = new Parser({ document: dom });
+
+    const invalidError = Error('Token with "invalid" type was not found.');
+    t.assert.throws(() => getInnerHTML(parser.parse(tokens)), invalidError);
+    t.assert.throws(() => getInnerHTML(parserInjectDom.parse(tokens), dom), invalidError);
   });
 
   test('invalid block token type silent', (t) => {
-    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
+    const parser = new Parser({ renderer: createRenderer({ document }), silent: true });
+    const parserInjectDom = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parse(tokens), dom));
   });
 
   test('invalid inline token type', (t) => {
-    const parser = new Parser({ document: dom });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.throws(() => getInnerHTML(parser.parseInline(tokens), dom), Error('Token with "invalid" type was not found.'));
+    const parser = new Parser();
+    const parserInjectDom = new Parser({ document: dom });
+
+    const invalidError = Error('Token with "invalid" type was not found.');
+    t.assert.throws(() => getInnerHTML(parser.parseInline(tokens)), invalidError);
+    t.assert.throws(() => getInnerHTML(parserInjectDom.parseInline(tokens), dom), invalidError);
   });
 
   test('invalid inline token type silent', (t) => {
-    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'invalid',
       },
     ];
 
-    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens), dom));
+    const parser = new Parser({ renderer: createRenderer({ document }), silent: true });
+    const parserInjectDom = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
+
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parseInline(tokens), dom));
   });
 
   test('no renderer parse', (t) => {
-    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'text',
@@ -94,12 +114,17 @@ suite('Parser', () => {
       },
     ];
 
+    const parser = new Parser({ renderer: createRenderer({ document }), silent: true });
+    const parserInjectDom = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
+
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
+    parserInjectDom.renderer = null;
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parse(tokens), dom));
   });
 
   test('no renderer parseinline', (t) => {
-    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'text',
@@ -107,13 +132,17 @@ suite('Parser', () => {
         text: 'text',
       },
     ];
+    const parser = new Parser({ renderer: createRenderer({ document }), silent: true });
+    const parserInjectDom = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
 
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens), dom));
+    parserInjectDom.renderer = null;
+
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parseInline(tokens), dom));
   });
 
   test('checkbox textRenderer', (t) => {
-    const parser = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
     const tokens = [
       {
         type: 'checkbox',
@@ -121,12 +150,17 @@ suite('Parser', () => {
       },
     ];
 
+    const parser = new Parser({ renderer: createRenderer({ document }), silent: true });
+    const parserInjectDom = new Parser({ document: dom, renderer: createRenderer({ document: dom }), silent: true });
+
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens, textRenderer), dom));
+    parserInjectDom.renderer = null;
+
+    t.assert.snapshot(getInnerHTML(parser.parseInline(tokens, textRenderer)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parseInline(tokens, textRenderer), dom));
   });
 
   test('no renderer', (t) => {
-    const parser = new Parser({ document: dom, silent: true });
     const tokens = [
       {
         type: 'text',
@@ -135,7 +169,13 @@ suite('Parser', () => {
       },
     ];
 
+    const parser = new Parser({ silent: true });
+    const parserInjectDom = new Parser({ document: dom, silent: true });
+
     parser.renderer = null;
-    t.assert.snapshot(getInnerHTML(parser.parse(tokens), dom));
+    parserInjectDom.renderer = null;
+
+    t.assert.snapshot(getInnerHTML(parser.parse(tokens)));
+    t.assert.snapshot(getInnerHTML(parserInjectDom.parse(tokens), dom));
   });
 });

@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
 export function getInnerHTML(fragment, dom) {
-  const div = dom.createElement('div');
+  const div = (dom ?? document).createElement('div');
   div.append(fragment);
   return div.innerHTML;
 }
