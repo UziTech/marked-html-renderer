@@ -1,37 +1,11 @@
 import type { Renderer, MarkedOptions, Parser } from 'marked';
 
 export const other = {
-  escapeTest: /[&<>"']/,
-  escapeReplace: /[&<>"']/g,
-  escapeTestNoEncode: /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/,
-  escapeReplaceNoEncode: /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/g,
   percentDecode: /%25/g,
   notSpaceStart: /^\S*/,
   endingNewline: /\n$/,
 };
 
-const escapeReplacements: Record<string, string> = {
-  '&': '&amp;',
-  '<': '&lt;',
-  '>': '&gt;',
-  '"': '&quot;',
-  "'": '&#39;',
-} as const;
-const getEscapeReplacement = (ch: string) => escapeReplacements[ch];
-
-export function escapeText(html: string, encode?: boolean) {
-  if (encode) {
-    if (other.escapeTest.test(html)) {
-      return html.replace(other.escapeReplace, getEscapeReplacement);
-    }
-  } else {
-    if (other.escapeTestNoEncode.test(html)) {
-      return html.replace(other.escapeReplaceNoEncode, getEscapeReplacement);
-    }
-  }
-
-  return html;
-}
 
 export function cleanUrl(href: string) {
   return encodeURI(href).replace(other.percentDecode, '%');
@@ -45,11 +19,10 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     return '';
   },
 
-  code({ text, lang, escaped }) {
+  code({ text, lang }) {
     const langString = (lang || '').match(other.notSpaceStart)?.[0];
 
-    let code = text.replace(other.endingNewline, '') + '\n';
-    code = (escaped ? code : escapeText(code, true));
+    const code = text.replace(other.endingNewline, '') + '\n';
 
     const preEl = document.createElement('pre');
     const codeEl = document.createElement('code');
@@ -201,7 +174,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
 
   codespan({ text }) {
     const code = document.createElement('code');
-    code.innerHTML = escapeText(text, true);
+    code.textContent = text;
     return code;
   },
 
@@ -235,7 +208,7 @@ export const renderer: Renderer<DocumentFragment, Node | string> = {
     out.src = href;
     out.alt = body.textContent || '';
     if (title) {
-      out.title = escapeText(title);
+      out.title = title;
     }
     out.append(body);
     return out;
