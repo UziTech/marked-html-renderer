@@ -1,14 +1,14 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
       "marked-html-renderer": [
-        "lib/index.d.ts"
+        "./lib/index.d.ts"
       ]
-    }
+    },
+    "rootDir": "./spec",
   },
   "include": [
-    "spec/*.types.ts"
+    "./spec/*.types.ts"
   ]
 }
