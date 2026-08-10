@@ -62,6 +62,6 @@
     "eslint": "^10.8.0",
     "jsdom": "^30.0.1",
     "marked": "^18.0.7",
-    "semantic-release": "^25.0.8"
+    "semantic-release": "^25.0.9"
   }
 }
